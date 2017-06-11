@@ -6,5 +6,8 @@ exports.install = function() {
 
 function view_index() {
 	var self = this;
-	self.view('index');
+
+
+
+	self.view('index', {name: 'Alain'});
 }

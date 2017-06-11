@@ -1,6 +1,5 @@
 const React = require('react');
 const theme = require('./theme.css');
-require('../../public/css/default.css');
 
 console.log("theme: ", theme)
 
