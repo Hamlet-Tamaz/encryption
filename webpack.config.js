@@ -42,18 +42,19 @@ module.exports = {
 	    { 
 	    	test: /\.(sass|scss)$/,
         use: [{
-            loader: "style-loader" // creates style nodes from JS strings
+            loader: "style-loader" 
         }, {
-            loader: "css-loader" // translates CSS into CommonJS
+            loader: "css-loader" 
         }, {
-            loader: "sass-loader" // compiles Sass to CSS
+            loader: "sass-loader" 
         }]
       }
 	  ]
 	},
+  watch: true,
 	devServer: {
-    publicPath: "/public/dist/",
-    contentBase: path.resolve(__dirname, './')
+    contentBase: path.resolve(__dirname, './public'),
+    publicPath: "/"
 	}
 
 
