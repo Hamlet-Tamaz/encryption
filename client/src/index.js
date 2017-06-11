@@ -1,7 +1,11 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const {Main} = require('./main.js');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Main} from './main.js';
 require('../public/css/default.css');
+
+import graphql from 'graphql';
+import {schema} from '../../graphql/schema';
+
 
 
 ReactDOM.render(

@@ -1,5 +1,5 @@
-const React = require('react');
-const theme = require('./theme.css');
+import React from 'react';
+import theme from './theme.css';
 
 console.log("theme: ", theme)
 

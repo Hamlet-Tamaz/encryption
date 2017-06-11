@@ -1,7 +1,15 @@
 exports.install = function() {
 	F.route('/', view_index);
-	// or
-	// F.route('/');
+	F.route('/graphql', view_graphql);
+
+	
+	F.use('graphql', '/graphql');
+	// F.use('graphql', function(req, res, next, options={
+	// 	schema,
+	// 	graphiql: true
+	// }){
+
+	// })
 };
 
 function view_index() {
@@ -10,4 +18,11 @@ function view_index() {
 
 
 	self.view('index', {name: 'Alain'});
+}
+
+function view_graphql() {
+	var self = this;
+	
+
+	// self.redirect('/')
 }
