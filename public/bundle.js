@@ -38351,7 +38351,6 @@ var MyDialog = function (_React$Component) {
 
 			_jquery2.default.post('/encrypt', { secretMsg: this.state.secretMsg,
 				passphrase: this.hash }, function (dec) {
-				console.log('dec: ', dec);
 
 				if (dec.error) {
 					alert(dec.error);

@@ -49,7 +49,6 @@ export default class MyDialog extends React.Component{
 		$.post('/encrypt', {secretMsg: this.state.secretMsg, 
 												passphrase: this.hash}, 
 			(dec) => {
-					console.log('dec: ', dec)
 
 					if(dec.error) {
 						alert(dec.error);

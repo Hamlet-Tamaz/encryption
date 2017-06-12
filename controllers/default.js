@@ -37,8 +37,7 @@ function encrypt() {
 	}
 
 	var passphrase = inp.passphrase;
-	
-	console.log('passphrase1: ', passphrase)
+
 
 	function encrypt(text){
 	  var cipher = crypto.createCipher(algorithm, passphrase)
@@ -68,11 +67,9 @@ function encrypt() {
 
 	}
 	else {
-		console.log('sec: ', body.secretMsg)
 		out = decrypt(body.secretMsg);
 
 
-		console.log('sec2: ', out)
 		out = JSON.parse(out);
 
 		if(out.expiration < new Date().toISOString().split('T')[0] && out.expiration != '') {
