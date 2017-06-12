@@ -3,3 +3,13 @@
 	width: 350px;
 	margin: 0 auto;
 }
+
+.pass {
+	text-align: center;
+	width: 350px;
+	margin: 0 auto;
+}
+
+.tooltipButton {
+	border-bottom: 10px solid red;
+}

@@ -20,10 +20,8 @@ export default class MyDialog extends React.Component{
 	    expiration: ''
 	  };		
 	  
-
 	  this.handleToggle = this.handleToggle.bind(this);
 	  this.handleDecrypt = this.handleDecrypt.bind(this);
-	  
 
 	  this.actions = [
 	    { label: "Close", onClick: this.handleToggle },
@@ -32,7 +30,6 @@ export default class MyDialog extends React.Component{
 	};
 
 	componentWillReceiveProps(newProps) {
-		console.log('willmount')
 		this.setState({secretMsg: newProps.secretMsg, active: newProps.isOpen})
 	}
 	
@@ -47,33 +44,36 @@ export default class MyDialog extends React.Component{
     this.setState({active: !this.state.active});
   }
 
-
   handleDecrypt() {
 		
-		console.log('Encrypt: ', this.state.secretMsg);
+		// console.log('Encrypt: ', this.state.secretMsg);
 
 		$.post('/encrypt', {secretMsg: this.state.secretMsg, 
 												passphrase: this.state.passphrase}, 
 			(dec) => {
-					console.log('sent encrypt request', dec);
+					
+console.log('dec: ', dec)
+
+					if(dec.error) {
+						alert('error!')
+
+					} else {
+
+					// console.log('sent encrypt request', dec);
 					this.setState({name: dec.name, 
 												 message: dec.message, 
 												 expiration: dec.expiration
 												})
+					}
 					
 			this.props.triggerParentUpdate(this.state);
 
 		}, 'json')
-
-
-
-  	// this.handleToggle();
   }
 
 
   render () {
-	  // console.log('open? ', this.props)
-			console.log('state: ', this.state)
+			// console.log('state: ', this.state)
 
     return (
       <div>
@@ -92,5 +92,3 @@ export default class MyDialog extends React.Component{
   }
 }
         
-
-  // <Button label='Show my dialog' onClick={this.handleToggle} />

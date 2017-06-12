@@ -21,7 +21,7 @@ exports.install = function() {
 function view_index() {
 	var self = this;
 
-
+console.log('NOW: ', new Date().toISOString().split('T')[0]);
 
 	self.view('index', {name: 'Alain'});
 }
@@ -73,12 +73,21 @@ console.log('inp: ', inp)
 		console.log('enc: ', out)
 	}
 	else {
+		// console.log('exp: ', body.expiration, 'now: ', new Date().toISOString().split('T')[0])
+
 		out = decrypt(body.secretMsg || '')
 
 		out = JSON.parse(out);
 		console.log('dec: ', out)
+
+		if(out.expiration < new Date().toISOString().split('T')[0]) {
+			var out = {error: "Sorry, your message has either expired or not decryptable"};
+			console.log("EXPIRED")
+		} 
+
+
 	}		 
-
-
+	console.log('out: ', out)
 	self.plain(out);
+
 }

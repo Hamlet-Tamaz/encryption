@@ -2,14 +2,21 @@ import React from 'react';
 import theme from './theme.css';
 import $ from 'jquery';
 
+import MyDialog from './dialog.js';
+
 import Button from 'react-toolbox/lib/button';
 import AppBar from 'react-toolbox/lib/app_bar';
 import {Card, CardMedia, CardTitle, CardText, CardActions}  from 'react-toolbox/lib/card';
 import Input from 'react-toolbox/lib/input';
 import Dialog from 'react-toolbox/lib/dialog';
-import MyDialog from './dialog.js';
 
-console.log('-------dialog')
+import Tooltip from 'react-toolbox/lib/tooltip';
+import Link from 'react-toolbox/lib/link';
+
+const TooltipLink = Tooltip(Link);
+const TooltipButton = Tooltip(Button);
+
+
 
 export default class Main extends React.Component{
 
@@ -84,7 +91,13 @@ export default class Main extends React.Component{
 												expiration: this.state.expiration,
 												mode: mode}, 
 			(pass) => {
-					this.setState({secretMsg: pass, isOpen: true})
+					this.setState({secretMsg: pass, 
+												 isOpen: true,
+												 name: '', 
+												 message: '',
+												 expiration: '' 
+
+												})
 			})
 	};
 
@@ -93,12 +106,17 @@ export default class Main extends React.Component{
 	};
 
 	getData(val) {
-		console.log('IN GET DATA', val);
 		this.setState({	name: val.name, 
 							      message: val.message, 
 										expiration: val.expiration,
 										isOpen: false
 									})
+	}
+
+	copyText(text) {
+		console.log('copying text', text)
+		document.querySelector('#samePass').select();
+		document.execCommand('copy');
 	}
 
 
@@ -137,7 +155,15 @@ export default class Main extends React.Component{
 
 
 
-			  <p>Your Passphrase - <strong>{this.state.passphrase}</strong></p>
+			  <p>Your Passphrase :</p>
+			  <Input id={'samePass'} value={this.state.passphrase} className={theme.pass} theme={theme} style={{textAlign: 'center'}}>
+			  </Input>
+
+			  <TooltipButton className={theme.tooltipButton} theme={theme}  onClick={this.copyText} label='Copy' primary raised tooltipPosition='bottom' tooltip='Click to Copy Passphrase'/>
+
+				<br/>
+				<br/>
+
 
 			  <a href="#" onClick={this.handlePassphrase}>Get New Passphrase</a>
 
@@ -152,3 +178,12 @@ export default class Main extends React.Component{
 		);
 	};
 };
+			  
+
+			  // <strong>{this.state.passphrase}</strong>
+			  // <TooltipLink
+			  // 	id={'pass'}
+			  // 	onClick={this.copyText(this.label)}
+			  // 	label={this.state.passphrase} 	
+			  // 	tooltip='Click to Copy Passphrase'
+			  // />
