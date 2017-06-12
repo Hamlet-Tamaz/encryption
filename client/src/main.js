@@ -2,13 +2,14 @@ import React from 'react';
 import theme from './theme.css';
 import $ from 'jquery';
 
-import Button from 'react-toolbox/lib/button'
-import AppBar from 'react-toolbox/lib/app_bar'
-import {Card, CardMedia, CardTitle, CardText, CardActions}  from 'react-toolbox/lib/card'
-import Input from 'react-toolbox/lib/input'
+import Button from 'react-toolbox/lib/button';
+import AppBar from 'react-toolbox/lib/app_bar';
+import {Card, CardMedia, CardTitle, CardText, CardActions}  from 'react-toolbox/lib/card';
+import Input from 'react-toolbox/lib/input';
+import myDialog from './dialog.js';
 
 
-export class Main extends React.Component{
+export default class Main extends React.Component{
 
 	constructor(props) {
 		super(props);
@@ -18,23 +19,20 @@ export class Main extends React.Component{
 			expiration: '',
 			passphrase: ''
 		};
-
-		// this.handleChange = this.handleChange.bind(this);
 	}
-	componentWillMount() {
-		console.log('will mount');
 
-		this.getPass();
-  }
+	componentWillMount() {
+		this.handdlePasshprase();
+  };
 
 	handleChange(name, value) {
 		this.setState({
 			[name]:value
 		});
-	}
+	};
 	
-	getPass() {
-    $.post('https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere', (pass) => {
+	handdlePasshprase() {
+		$.post('https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere', (pass) => {
 			console.log('pass: ', pass);
 			this.setState({
 				passphrase: pass
@@ -46,23 +44,27 @@ export class Main extends React.Component{
 	  .fail(function() {
 	    console.log( "Unable to retrieve passphrase." );
 	  })
-	}
+	};
 
-	handleEncrypt() {
-		console.log('Encrypt');
+	handleEncrypt(mode) {
+		console.log('Encrypt: ', this.state.message);
 
-		$.get('/encrypt', {message: this.state.message, passphrase: this.state.passphrase, expiration: this.state.expiration}, function(pass) {
-			console.log('sent encrypt request', pass)
-		})
-	}
+		$.post('/encrypt', {message: this.state.message, 
+												passphrase: this.state.passphrase, 
+												expiration: this.state.expiration,
+												mode: mode
+											})
+				.done(function(pass) {
+					console.log('sent encrypt request', pass);
+					
+
+				})
+	};
 
 	handleDecrypt() {
 		alert('Decrypt')
-	}
+	};
 
-	handdlePasshprase() {
-		this.getPass();
-	}
 
 	render() {
 		return(
@@ -84,8 +86,8 @@ export class Main extends React.Component{
 
         
 				  <CardActions>
-			      <Button label="Encrypt" onClick={this.handleEncrypt.bind(this)}/>
-			      <Button label="Decrypt" onClick={this.handleDecrypt.bind(this)}/>
+			      <Button label="Encrypt" onClick={this.handleEncrypt.bind(this, 'encrypt')}/>
+			      <Button label="Decrypt" onClick={this.handleEncrypt.bind(this, 'decrypt')}/>
 			    </CardActions>
 
 			  </Card>
@@ -93,7 +95,9 @@ export class Main extends React.Component{
 			  <p>Your Passphrase - <strong>{this.state.passphrase}</strong></p>
 
 			  <a href="#" onClick={this.handdlePasshprase.bind(this)}>Get New Passphrase</a>
+
+			  <myDialog></myDialog>
 			</div>
-		)
-	}
-}
+		);
+	};
+};

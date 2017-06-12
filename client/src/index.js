@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Main} from './main.js';
+import Main from './main.js';
 require('../public/css/default.css');
 
 // import {encrypt} from '../../definitions/helpers.js'
