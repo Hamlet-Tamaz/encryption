@@ -52,22 +52,6 @@ export default class Main extends React.Component{
 		this.state.passphrase == 'blabla' ? this.setState({passphrase: 'changed'}) : this.setState({passphrase: 'blabla'})
 
 
-		// $.ajax({
-		// 	type: "GET",
-		// 	'Access-Control-Allow-Origin':,
-		// 	url: url,
-		// 	// jsonp: "callback",
-		// 	// dataType: 'jsonp',
-		// 	// crossDomain: true,
-
-
-		// 	success: (pass) => {
-		// 		console.log('pass: ', pass)
-		// 	}
-
-		// })
-
-
 		// $.get(url, (pass) => {
 		// 	console.log('pass: ', pass);
 		// 	this.setState({
@@ -85,7 +69,7 @@ export default class Main extends React.Component{
 	handleEncrypt(mode) {
 		console.log('Encrypt: ', this.state.message);
 
-		$.post('/encrypt', {name: this.state.name,
+		$.post('/encrypt#' + this.state.passphrase, {name: this.state.name,
 												message: this.state.message, 
 												passphrase: this.state.passphrase, 
 												expiration: this.state.expiration,

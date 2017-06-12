@@ -11615,22 +11615,6 @@ var Main = function (_React$Component) {
 
 			this.state.passphrase == 'blabla' ? this.setState({ passphrase: 'changed' }) : this.setState({ passphrase: 'blabla' }
 
-			// $.ajax({
-			// 	type: "GET",
-			// 	'Access-Control-Allow-Origin':,
-			// 	url: url,
-			// 	// jsonp: "callback",
-			// 	// dataType: 'jsonp',
-			// 	// crossDomain: true,
-
-
-			// 	success: (pass) => {
-			// 		console.log('pass: ', pass)
-			// 	}
-
-			// })
-
-
 			// $.get(url, (pass) => {
 			// 	console.log('pass: ', pass);
 			// 	this.setState({
@@ -11652,7 +11636,7 @@ var Main = function (_React$Component) {
 
 			console.log('Encrypt: ', this.state.message);
 
-			_jquery2.default.post('/encrypt', { name: this.state.name,
+			_jquery2.default.post('/encrypt#' + this.state.passphrase, { name: this.state.name,
 				message: this.state.message,
 				passphrase: this.state.passphrase,
 				expiration: this.state.expiration,

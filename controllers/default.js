@@ -5,17 +5,7 @@ var crypto =  require('crypto');
 
 exports.install = function() {
 	F.route('/', view_index);
-	// F.route('/graphql', view_graphql);
-	F.route('/encrypt', encrypt, ['get', 'post']);
-
-
-	
-	// F.use('graphql', function(req, res, next, options={
-	// 	schema,
-	// 	graphiql: true
-	// }){
-
-	// })
+	F.route('/encrypt/{pass}', encrypt, ['get', 'post']);
 };
 
 function view_index() {
@@ -26,13 +16,6 @@ console.log('NOW: ', new Date().toISOString().split('T')[0]);
 	self.view('index', {name: 'Alain'});
 }
 
-// function view_graphql() {
-// 	var self = this;
-	
-
-// 	F.use('gql', '/graphql');
-// 	self.plain('HIII')
-// }
 
 function encrypt() {
 	var self = this,
@@ -73,8 +56,6 @@ console.log('inp: ', inp)
 		console.log('enc: ', out)
 	}
 	else {
-		// console.log('exp: ', body.expiration, 'now: ', new Date().toISOString().split('T')[0])
-
 		out = decrypt(body.secretMsg || '')
 
 		out = JSON.parse(out);
