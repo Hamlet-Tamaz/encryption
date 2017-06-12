@@ -55,14 +55,14 @@ export default class MyDialog extends React.Component{
 console.log('dec: ', dec)
 
 					if(dec.error) {
-						alert('error!')
-
+						alert(dec.error);
 					} else {
 
 					// console.log('sent encrypt request', dec);
-					this.setState({name: dec.name, 
+						this.setState({name: dec.name, 
 												 message: dec.message, 
-												 expiration: dec.expiration
+												 expiration: dec.expiration,
+												 secretMsg: dec.secretMsg
 												})
 					}
 					
@@ -73,7 +73,6 @@ console.log('dec: ', dec)
 
 
   render () {
-			// console.log('state: ', this.state)
 
     return (
       <div>

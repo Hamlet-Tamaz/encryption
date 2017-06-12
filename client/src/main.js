@@ -141,13 +141,13 @@ export default class Main extends React.Component{
 					
 					<Input type='text' label='Message' value={this.state.message} onChange={this.handleChange.bind(this, 'message')} maxLength={120} required></Input>
 					
-					<Input type='date' label='Expiration Date' value={this.state.expiration} onChange={this.handleChange.bind(this, 'expiration')} required></Input>
+					<Input type='date' label='Expiration Date' value={this.state.expiration} onChange={this.handleChange.bind(this, 'expiration')}></Input>
 
 
         
 				  <CardActions>
-			      <Button label="Encrypt" onClick={this.handleEncrypt.bind(this, 'encrypt')}/>
-			      <Button label="Decrypt" onClick={this.handleDecrypt.bind(this, 'decrypt')}/>
+			      <Button raised label="Encrypt" onClick={this.handleEncrypt.bind(this, 'encrypt')}/>
+			      <Button primary label="Decrypt" onClick={this.handleDecrypt.bind(this, 'decrypt')}/>
 			    </CardActions>
 
 			  </Card>
@@ -159,7 +159,7 @@ export default class Main extends React.Component{
 			  <Input id={'samePass'} value={this.state.passphrase} className={theme.pass} theme={theme} style={{textAlign: 'center'}}>
 			  </Input>
 
-			  <TooltipButton className={theme.tooltipButton} theme={theme}  onClick={this.copyText} label='Copy' primary raised tooltipPosition='bottom' tooltip='Click to Copy Passphrase'/>
+			  <TooltipButton className={theme.tooltipButton} theme={theme}  onClick={this.copyText} label='Copy' primary raised tooltip tooltipPosition='bottom' tooltip='Click to Copy Passphrase'/>
 
 				<br/>
 				<br/>

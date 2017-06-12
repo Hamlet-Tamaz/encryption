@@ -11707,12 +11707,12 @@ var Main = function (_React$Component) {
 					}),
 					_react2.default.createElement(_input2.default, { type: 'text', label: 'Name', value: this.state.name, onChange: this.handleChange.bind(this, 'name'), required: true }),
 					_react2.default.createElement(_input2.default, { type: 'text', label: 'Message', value: this.state.message, onChange: this.handleChange.bind(this, 'message'), maxLength: 120, required: true }),
-					_react2.default.createElement(_input2.default, { type: 'date', label: 'Expiration Date', value: this.state.expiration, onChange: this.handleChange.bind(this, 'expiration'), required: true }),
+					_react2.default.createElement(_input2.default, { type: 'date', label: 'Expiration Date', value: this.state.expiration, onChange: this.handleChange.bind(this, 'expiration') }),
 					_react2.default.createElement(
 						_card.CardActions,
 						null,
-						_react2.default.createElement(_button2.default, { label: 'Encrypt', onClick: this.handleEncrypt.bind(this, 'encrypt') }),
-						_react2.default.createElement(_button2.default, { label: 'Decrypt', onClick: this.handleDecrypt.bind(this, 'decrypt') })
+						_react2.default.createElement(_button2.default, { raised: true, label: 'Encrypt', onClick: this.handleEncrypt.bind(this, 'encrypt') }),
+						_react2.default.createElement(_button2.default, { primary: true, label: 'Decrypt', onClick: this.handleDecrypt.bind(this, 'decrypt') })
 					)
 				),
 				_react2.default.createElement(
@@ -11721,7 +11721,7 @@ var Main = function (_React$Component) {
 					'Your Passphrase :'
 				),
 				_react2.default.createElement(_input2.default, { id: 'samePass', value: this.state.passphrase, className: _theme2.default.pass, theme: _theme2.default, style: { textAlign: 'center' } }),
-				_react2.default.createElement(TooltipButton, { className: _theme2.default.tooltipButton, theme: _theme2.default, onClick: this.copyText, label: 'Copy', primary: true, raised: true, tooltipPosition: 'bottom', tooltip: 'Click to Copy Passphrase' }),
+				_react2.default.createElement(TooltipButton, _defineProperty({ className: _theme2.default.tooltipButton, theme: _theme2.default, onClick: this.copyText, label: 'Copy', primary: true, raised: true, tooltip: true, tooltipPosition: 'bottom' }, 'tooltip', 'Click to Copy Passphrase')),
 				_react2.default.createElement('br', null),
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
@@ -36993,13 +36993,14 @@ var MyDialog = function (_React$Component) {
 				console.log('dec: ', dec);
 
 				if (dec.error) {
-					alert('error!');
+					alert(dec.error);
 				} else {
 
 					// console.log('sent encrypt request', dec);
 					_this2.setState({ name: dec.name,
 						message: dec.message,
-						expiration: dec.expiration
+						expiration: dec.expiration,
+						secretMsg: dec.secretMsg
 					});
 				}
 
@@ -37009,7 +37010,6 @@ var MyDialog = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			// console.log('state: ', this.state)
 
 			return _react2.default.createElement(
 				'div',

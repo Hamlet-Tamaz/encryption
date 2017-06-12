@@ -80,13 +80,14 @@ console.log('inp: ', inp)
 		out = JSON.parse(out);
 		console.log('dec: ', out)
 
-		if(out.expiration < new Date().toISOString().split('T')[0]) {
+		if(out.expiration < new Date().toISOString().split('T')[0] && out.expiration != '') {
 			var out = {error: "Sorry, your message has either expired or not decryptable"};
 			console.log("EXPIRED")
 		} 
 
 
-	}		 
+	}	
+
 	console.log('out: ', out)
 	self.plain(out);
 
