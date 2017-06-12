@@ -52,7 +52,7 @@ export default class MyDialog extends React.Component{
 												passphrase: this.state.passphrase}, 
 			(dec) => {
 					
-console.log('dec: ', dec)
+// console.log('dec: ', dec)
 
 					if(dec.error) {
 						alert(dec.error);

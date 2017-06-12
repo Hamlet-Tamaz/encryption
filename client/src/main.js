@@ -68,22 +68,30 @@ export default class Main extends React.Component{
 
 	handleEncrypt(mode) {
 		console.log('Encrypt: ', this.state.message);
-
-		$.post('/encrypt#' + this.state.passphrase, {name: this.state.name,
-												message: this.state.message, 
-												passphrase: this.state.passphrase, 
-												expiration: this.state.expiration,
-												mode: mode}, 
-			(pass) => {
-					this.setState({secretMsg: pass, 
-												 isOpen: true,
-												 name: '', 
-												 message: '',
-												 expiration: '' 
-
-												})
-			})
+		
+		if (this.state.name.length > 0) {
+			if(this.state.message.length > 0) {
+				$.post('/encrypt', {name: this.state.name,
+														message: this.state.message, 
+														// passphrase: this.state.passphrase, 
+														expiration: this.state.expiration,
+														mode: mode}, 
+					(pass) => {
+							this.setState({secretMsg: pass, 
+														 isOpen: true,
+														 name: '', 
+														 message: '',
+														 expiration: '' 
+														})
+					})		
+			} else {
+				alert('Please enter a MESSAGE that has at least one character.')
+			}
+		} else {
+			alert('Please enter a NAME that has at least one character.')
+		}
 	};
+
 
 	handleDecrypt() {
 		this.setState({isOpen: true})
@@ -98,7 +106,6 @@ export default class Main extends React.Component{
 	}
 
 	copyText(text) {
-		console.log('copying text', text)
 		document.querySelector('#samePass').select();
 		document.execCommand('copy');
 	}
@@ -143,11 +150,10 @@ export default class Main extends React.Component{
 			  <Input id={'samePass'} value={this.state.passphrase} className={theme.pass} theme={theme} style={{textAlign: 'center'}}>
 			  </Input>
 
-			  <TooltipButton className={theme.tooltipButton} theme={theme}  onClick={this.copyText} label='Copy' primary raised tooltip tooltipPosition='bottom' tooltip='Click to Copy Passphrase'/>
+			  <TooltipButton className={theme.tooltipButton} theme={theme}  onClick={this.copyText} href={'#'+passphrase} label='Copy' primary raised tooltip tooltipPosition='bottom' tooltip='Click to Copy Passphrase'/>
 
 				<br/>
 				<br/>
-
 
 			  <a href="#" onClick={this.handlePassphrase}>Get New Passphrase</a>
 
@@ -164,10 +170,3 @@ export default class Main extends React.Component{
 };
 			  
 
-			  // <strong>{this.state.passphrase}</strong>
-			  // <TooltipLink
-			  // 	id={'pass'}
-			  // 	onClick={this.copyText(this.label)}
-			  // 	label={this.state.passphrase} 	
-			  // 	tooltip='Click to Copy Passphrase'
-			  // />

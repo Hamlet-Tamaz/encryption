@@ -5,25 +5,30 @@ var crypto =  require('crypto');
 
 exports.install = function() {
 	F.route('/', view_index);
-	F.route('/encrypt/{pass}', encrypt, ['get', 'post']);
+	F.route('/encrypt', encrypt, ['get', 'post']);
 };
+
+
 
 function view_index() {
 	var self = this;
 
-console.log('NOW: ', new Date().toISOString().split('T')[0]);
+
 
 	self.view('index', {name: 'Alain'});
 }
 
 
 function encrypt() {
+
 	var self = this,
 			body = self.body,
 			algorithm = 'aes-256-ctr',
+			passphrase = 'self',
 			inp = {},
 			out;
 	
+console.log('self: ', self.req)
 	console.log('body: ', body)
 	
 	inp = {
@@ -32,12 +37,12 @@ function encrypt() {
 		expiration: body.expiration
 	}
 
-	inp = JSON.stringify(inp);
+
 
 console.log('inp: ', inp)
 
 	function encrypt(text){
-	  var cipher = crypto.createCipher(algorithm,'body.passphrase')
+	  var cipher = crypto.createCipher(algorithm, passphrase)
 	  var crypted = cipher.update(text,'utf8','hex')
 	  crypted += cipher.final('hex');
 	  return crypted;
@@ -52,7 +57,18 @@ console.log('inp: ', inp)
 	
 	
 	if(body.mode == 'encrypt') {
-		out = encrypt(inp);
+		if(inp.name.length > 0) {
+			if(inp.message.length > 0)  {
+				inp = JSON.stringify(inp);
+				out = encrypt(inp);
+			} else {
+				out = {error: "Sorry, your message doesn't match our requirements"};
+			}
+		} else {
+			out = {error: "Sorry, your name doesn't match our requirements."};
+		}
+
+
 		console.log('enc: ', out)
 	}
 	else {
@@ -62,7 +78,7 @@ console.log('inp: ', inp)
 		console.log('dec: ', out)
 
 		if(out.expiration < new Date().toISOString().split('T')[0] && out.expiration != '') {
-			var out = {error: "Sorry, your message has either expired or not decryptable"};
+			out = {error: "Sorry, your message has either expired or not decryptable"};
 			console.log("EXPIRED")
 		} 
 
