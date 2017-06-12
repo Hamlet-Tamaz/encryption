@@ -1,9 +1,13 @@
+var encryptHelper = F.helpers.encrypt;
+
+
 exports.install = function() {
 	F.route('/', view_index);
 	F.route('/graphql', view_graphql);
+	F.route('/encrypt', encrypt);
+
 
 	
-	F.use('graphql', '/graphql');
 	// F.use('graphql', function(req, res, next, options={
 	// 	schema,
 	// 	graphiql: true
@@ -24,5 +28,17 @@ function view_graphql() {
 	var self = this;
 	
 
-	// self.redirect('/')
+	F.use('gql', '/graphql');
+	self.plain('HIII')
+}
+
+function encrypt() {
+	var self = this;
+	var pass = self.body.pass;
+
+	console.log('---HERE---', encryptHelper)
+
+
+
+	self.plain('pass!!!');
 }

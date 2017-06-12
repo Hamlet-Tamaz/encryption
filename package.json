@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node debug.js | npm run build",
-    "build": "webpack"
+    "build": "webpack --watch"
   },
   "author": "",
   "license": "ISC",
@@ -24,8 +24,8 @@
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "express": "^4.15.3",
-    "graphql": "^0.10.1",
+    "bcryptjs": "^2.4.3",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",

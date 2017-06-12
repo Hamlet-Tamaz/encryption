@@ -1,13 +1,16 @@
-import graphql from 'graphql';
-import _ from 'lodash';
-import {
+const graphql = require('graphql');
+const _ = require('lodash');
+const {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLInt,
 	GraphQLSchema,
 	GraphQLNonNull,
 	GraphQLID
-} from 'graphql';
+} = graphql;
+
+console.log('----graphql: ', GraphQLString)
+
 
 const users = [
 	{id: '23', firstName: "Bill", age: 20},

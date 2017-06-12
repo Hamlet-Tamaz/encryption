@@ -1,7 +1,6 @@
 import React from 'react';
 import theme from './theme.css';
-
-console.log("theme: ", theme)
+import $ from 'jquery';
 
 import Button from 'react-toolbox/lib/button'
 import AppBar from 'react-toolbox/lib/app_bar'
@@ -17,11 +16,16 @@ export class Main extends React.Component{
 			name: '',
 			message: '', 
 			expiration: '',
-			passphrase: 'blabla'
+			passphrase: ''
 		};
 
 		// this.handleChange = this.handleChange.bind(this);
 	}
+	componentWillMount() {
+		console.log('will mount');
+
+		this.getPass();
+  }
 
 	handleChange(name, value) {
 		this.setState({
@@ -29,8 +33,27 @@ export class Main extends React.Component{
 		});
 	}
 	
+	getPass() {
+    $.post('https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere', (pass) => {
+			console.log('pass: ', pass);
+			this.setState({
+				passphrase: pass
+			})
+		})
+		.done(function(pass) {
+	    console.log( "Successfully retrieved passphrase" );
+	  })
+	  .fail(function() {
+	    console.log( "Unable to retrieve passphrase." );
+	  })
+	}
+
 	handleEncrypt() {
-		alert('Encrypt')
+		console.log('Encrypt');
+
+		$.get('/encrypt', {message: this.state.message, passphrase: this.state.passphrase, expiration: this.state.expiration}, function(pass) {
+			console.log('sent encrypt request', pass)
+		})
 	}
 
 	handleDecrypt() {
@@ -38,7 +61,7 @@ export class Main extends React.Component{
 	}
 
 	handdlePasshprase() {
-		alert('Passphrase')
+		this.getPass();
 	}
 
 	render() {

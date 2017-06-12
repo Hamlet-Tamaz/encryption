@@ -55,7 +55,12 @@ module.exports = {
 	devServer: {
     contentBase: path.resolve(__dirname, './public'),
     publicPath: "/"
-	}
+	},
+  // target: 'node'
+  // node: {
+  //   fs: 'empty'
+  // }
+
 
 
 };
