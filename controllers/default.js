@@ -24,22 +24,20 @@ function encrypt() {
 	var self = this,
 			body = self.body,
 			algorithm = 'aes-256-ctr',
-			passphrase = 'self',
 			inp = {},
 			out;
 	
 console.log('self: ', self.req)
-	console.log('body: ', body)
 	
 	inp = {
 		name: body.name,
 		message: body.message,
-		expiration: body.expiration
+		expiration: body.expiration,
+		passphrase: body.passphrase
 	}
 
+	var passphrase = inp.passphrase;
 
-
-console.log('inp: ', inp)
 
 	function encrypt(text){
 	  var cipher = crypto.createCipher(algorithm, passphrase)
@@ -49,7 +47,7 @@ console.log('inp: ', inp)
 	}
 
 	function decrypt(text){
-	  var decipher = crypto.createDecipher(algorithm,'body.passphrase')
+	  var decipher = crypto.createDecipher(algorithm, passphrase)
 	  var dec = decipher.update(text,'hex','utf8')
 	  dec += decipher.final('utf8');
 	  return dec;

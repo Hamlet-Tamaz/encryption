@@ -34,7 +34,6 @@ export default class MyDialog extends React.Component{
 	}
 	
 	handleChange(name, value) {
-
 		this.setState({
 			[name]:value
 		});
@@ -45,20 +44,14 @@ export default class MyDialog extends React.Component{
   }
 
   handleDecrypt() {
-		
-		// console.log('Encrypt: ', this.state.secretMsg);
-
 		$.post('/encrypt', {secretMsg: this.state.secretMsg, 
 												passphrase: this.state.passphrase}, 
 			(dec) => {
 					
-// console.log('dec: ', dec)
 
 					if(dec.error) {
 						alert(dec.error);
 					} else {
-
-					// console.log('sent encrypt request', dec);
 						this.setState({name: dec.name, 
 												 message: dec.message, 
 												 expiration: dec.expiration,

@@ -73,7 +73,7 @@ export default class Main extends React.Component{
 			if(this.state.message.length > 0) {
 				$.post('/encrypt', {name: this.state.name,
 														message: this.state.message, 
-														// passphrase: this.state.passphrase, 
+														passphrase: this.state.passphrase, 
 														expiration: this.state.expiration,
 														mode: mode}, 
 					(pass) => {

@@ -22937,7 +22937,7 @@ var Main = function (_React$Component) {
 				if (this.state.message.length > 0) {
 					_jquery2.default.post('/encrypt', { name: this.state.name,
 						message: this.state.message,
-						// passphrase: this.state.passphrase, 
+						passphrase: this.state.passphrase,
 						expiration: this.state.expiration,
 						mode: mode }, function (pass) {
 						_this2.setState({ secretMsg: pass,
@@ -38335,7 +38335,6 @@ var MyDialog = function (_React$Component) {
 	}, {
 		key: 'handleChange',
 		value: function handleChange(name, value) {
-
 			this.setState(_defineProperty({}, name, value));
 		}
 	}, {
@@ -38348,18 +38347,12 @@ var MyDialog = function (_React$Component) {
 		value: function handleDecrypt() {
 			var _this2 = this;
 
-			// console.log('Encrypt: ', this.state.secretMsg);
-
 			_jquery2.default.post('/encrypt', { secretMsg: this.state.secretMsg,
 				passphrase: this.state.passphrase }, function (dec) {
-
-				// console.log('dec: ', dec)
 
 				if (dec.error) {
 					alert(dec.error);
 				} else {
-
-					// console.log('sent encrypt request', dec);
 					_this2.setState({ name: dec.name,
 						message: dec.message,
 						expiration: dec.expiration,
