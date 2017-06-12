@@ -27,6 +27,8 @@ export default class MyDialog extends React.Component{
 	    { label: "Close", onClick: this.handleToggle },
 	    { label: "Decrypt", onClick: this.handleDecrypt }
 	  ];
+
+	  this.hash = window.location.hash;
 	};
 
 	componentWillReceiveProps(newProps) {
@@ -45,9 +47,9 @@ export default class MyDialog extends React.Component{
 
   handleDecrypt() {
 		$.post('/encrypt', {secretMsg: this.state.secretMsg, 
-												passphrase: this.state.passphrase}, 
+												passphrase: this.hash}, 
 			(dec) => {
-					
+					console.log('dec: ', dec)
 
 					if(dec.error) {
 						alert(dec.error);
@@ -55,7 +57,7 @@ export default class MyDialog extends React.Component{
 						this.setState({name: dec.name, 
 												 message: dec.message, 
 												 expiration: dec.expiration,
-												 secretMsg: dec.secretMsg
+												 secretMsg: dec.secretMsg,
 												})
 					}
 					

@@ -27,12 +27,15 @@ export default class Main extends React.Component{
 			message: '', 
 			secretMsg: '',
 			expiration: '',
-			passphrase: 'blabla',
+			passphrase: '',
 			isOpen: false
 		};
 
 		this.handlePassphrase = this.handlePassphrase.bind(this);
 		this.getData = this.getData.bind(this);
+
+		this.hash = window.location.hash;
+
 	}
 
 	componentWillMount() {
@@ -49,31 +52,28 @@ export default class Main extends React.Component{
 		let url = 'https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere';
 
 		
-		this.state.passphrase == 'blabla' ? this.setState({passphrase: 'changed'}) : this.setState({passphrase: 'blabla'})
+		// this.state.passphrase == 'blabla' ? this.setState({passphrase: 'changed'}) : this.setState({passphrase: 'blabla'})
 
 
-		// $.get(url, (pass) => {
-		// 	console.log('pass: ', pass);
-		// 	this.setState({
-		// 		passphrase: pass
-		// 	})
-		// })
-		// .done(function(pass) {
-	 //    console.log( "Successfully retrieved passphrase" );
-	 //  })
-	 //  .fail(function() {
-	 //    console.log( "Unable to retrieve passphrase." );
-	 //  })
+		$.get(url, (pass) => {
+			this.setState({
+				passphrase: pass
+			})
+		})
+		.done(function(pass) {
+	    console.log( "Successfully retrieved passphrase" );
+	  })
+	  .fail(function() {
+	    console.log( "Unable to retrieve passphrase." );
+	  })
 	};
 
-	handleEncrypt(mode) {
-		console.log('Encrypt: ', this.state.message);
-		
+	handleEncrypt(mode) {		
 		if (this.state.name.length > 0) {
 			if(this.state.message.length > 0) {
 				$.post('/encrypt', {name: this.state.name,
 														message: this.state.message, 
-														passphrase: this.state.passphrase, 
+														passphrase: this.hash, 
 														expiration: this.state.expiration,
 														mode: mode}, 
 					(pass) => {
@@ -118,7 +118,6 @@ export default class Main extends React.Component{
 		var passphrase = this.state.passphrase;
 
 
-
 		return(
 			<div>
 			  <Card className={theme.Card} theme={theme}>
@@ -161,7 +160,7 @@ export default class Main extends React.Component{
 					triggerParentUpdate={this.getData} 
 					secretMsg={secretMsg} 
 					isOpen={isOpen} 
-					passphrase={passphrase} 
+					passphrase={this.hash} 
 				/>
 
 			</div>

@@ -18,6 +18,8 @@ function view_index() {
 	self.view('index', {name: 'Alain'});
 }
 
+//////////
+
 
 function encrypt() {
 
@@ -27,8 +29,6 @@ function encrypt() {
 			inp = {},
 			out;
 	
-console.log('self: ', self.req)
-	
 	inp = {
 		name: body.name,
 		message: body.message,
@@ -37,7 +37,8 @@ console.log('self: ', self.req)
 	}
 
 	var passphrase = inp.passphrase;
-
+	
+	console.log('passphrase1: ', passphrase)
 
 	function encrypt(text){
 	  var cipher = crypto.createCipher(algorithm, passphrase)
@@ -53,7 +54,6 @@ console.log('self: ', self.req)
 	  return dec;
 	}
 	
-	
 	if(body.mode == 'encrypt') {
 		if(inp.name.length > 0) {
 			if(inp.message.length > 0)  {
@@ -66,24 +66,19 @@ console.log('self: ', self.req)
 			out = {error: "Sorry, your name doesn't match our requirements."};
 		}
 
-
-		console.log('enc: ', out)
 	}
 	else {
-		out = decrypt(body.secretMsg || '')
+		console.log('sec: ', body.secretMsg)
+		out = decrypt(body.secretMsg);
 
+
+		console.log('sec2: ', out)
 		out = JSON.parse(out);
-		console.log('dec: ', out)
 
 		if(out.expiration < new Date().toISOString().split('T')[0] && out.expiration != '') {
 			out = {error: "Sorry, your message has either expired or not decryptable"};
-			console.log("EXPIRED")
 		} 
-
-
 	}	
 
-	console.log('out: ', out)
 	self.plain(out);
-
 }
