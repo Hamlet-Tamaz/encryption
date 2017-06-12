@@ -1,5 +1,6 @@
 import React from 'react';
 import theme from './theme.css';
+import $ from 'jquery';
 
 import Button from 'react-toolbox/lib/button';
 import {Card, CardMedia, CardTitle, CardText, CardActions}  from 'react-toolbox/lib/card';
@@ -12,8 +13,11 @@ export default class MyDialog extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			message: this.props.message,
-	    active: false
+			secretMsg: this.props.secretMsg,
+	    active: this.props.isOpen,
+	    passphrase: this.props.passphrase,
+	    message: '',
+	    expiration: ''
 	  };		
 	  
 
@@ -23,12 +27,17 @@ export default class MyDialog extends React.Component{
 
 	  this.actions = [
 	    { label: "Close", onClick: this.handleToggle },
-	    { label: "Decrypt", onClick: this.Decrypt }
+	    { label: "Decrypt", onClick: this.handleDecrypt }
 	  ];
 	};
+
+	componentWillReceiveProps(newProps) {
+		console.log('willmount')
+		this.setState({secretMsg: newProps.secretMsg, active: newProps.isOpen})
+	}
 	
 	handleChange(name, value) {
-		console.log('name: ', name, 'value: ', value)
+
 		this.setState({
 			[name]:value
 		});
@@ -38,17 +47,34 @@ export default class MyDialog extends React.Component{
     this.setState({active: !this.state.active});
   }
 
+
   handleDecrypt() {
 		
+		console.log('Encrypt: ', this.state.secretMsg);
+
+		$.post('/encrypt', {secretMsg: this.state.secretMsg, 
+												passphrase: this.state.passphrase}, 
+			(dec) => {
+					console.log('sent encrypt request', dec);
+					this.setState({name: dec.name, 
+												 message: dec.message, 
+												 expiration: dec.expiration
+												})
+					
+			this.props.triggerParentUpdate(this.state);
+
+		}, 'json')
 
 
 
-
-  	this.handleToggle();
+  	// this.handleToggle();
   }
 
 
   render () {
+	  // console.log('open? ', this.props)
+			console.log('state: ', this.state)
+
     return (
       <div>
         <Dialog
@@ -58,10 +84,8 @@ export default class MyDialog extends React.Component{
           onOverlayClick={this.handleToggle}
           title='De/Encryption'>
 					
-					<Input type='text' label='Message' value={this.state.message} onChange={this.handleChange.bind(this, 'message')} maxLength={120} required></Input>
+					<Input type='text' label='Message' value={this.state.secretMsg} onChange={this.handleChange.bind(this, 'secretMsg')} multiline={true} rows={5} required></Input>
 
-
-          <p>Here you can add arbitrary content. Components like Pickers are using dialogs now.</p>
         </Dialog>
     	</div>
     )

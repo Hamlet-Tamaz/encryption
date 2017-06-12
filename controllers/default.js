@@ -73,7 +73,9 @@ console.log('inp: ', inp)
 		console.log('enc: ', out)
 	}
 	else {
-		out = decrypt(body.message)
+		out = decrypt(body.secretMsg || '')
+
+		out = JSON.parse(out);
 		console.log('dec: ', out)
 	}		 
 

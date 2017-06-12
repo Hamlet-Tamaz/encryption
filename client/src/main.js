@@ -20,13 +20,16 @@ export default class Main extends React.Component{
 			message: '', 
 			secretMsg: '',
 			expiration: '',
-			passphrase: '',
-			open: false
+			passphrase: 'blabla',
+			isOpen: false
 		};
+
+		this.handlePassphrase = this.handlePassphrase.bind(this);
+		this.getData = this.getData.bind(this);
 	}
 
 	componentWillMount() {
-		this.handdlePasshprase();
+		this.handlePassphrase();
   };
 
 	handleChange(name, value) {
@@ -35,50 +38,77 @@ export default class Main extends React.Component{
 		});
 	};
 	
-	handdlePasshprase() {
-		$.post('https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere', (pass) => {
-			console.log('pass: ', pass);
-			this.setState({
-				passphrase: pass
-			})
-		})
-		.done(function(pass) {
-	    console.log( "Successfully retrieved passphrase" );
-	  })
-	  .fail(function() {
-	    console.log( "Unable to retrieve passphrase." );
-	  })
+	handlePassphrase() {
+		let url = 'https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere';
+
+		
+		this.state.passphrase == 'blabla' ? this.setState({passphrase: 'changed'}) : this.setState({passphrase: 'blabla'})
+
+
+		// $.ajax({
+		// 	type: "GET",
+		// 	'Access-Control-Allow-Origin':,
+		// 	url: url,
+		// 	// jsonp: "callback",
+		// 	// dataType: 'jsonp',
+		// 	// crossDomain: true,
+
+
+		// 	success: (pass) => {
+		// 		console.log('pass: ', pass)
+		// 	}
+
+		// })
+
+
+		// $.get(url, (pass) => {
+		// 	console.log('pass: ', pass);
+		// 	this.setState({
+		// 		passphrase: pass
+		// 	})
+		// })
+		// .done(function(pass) {
+	 //    console.log( "Successfully retrieved passphrase" );
+	 //  })
+	 //  .fail(function() {
+	 //    console.log( "Unable to retrieve passphrase." );
+	 //  })
 	};
 
 	handleEncrypt(mode) {
 		console.log('Encrypt: ', this.state.message);
 
-		$.post('/encrypt', {message: this.state.message, 
+		$.post('/encrypt', {name: this.state.name,
+												message: this.state.message, 
 												passphrase: this.state.passphrase, 
 												expiration: this.state.expiration,
 												mode: mode}, 
 			(pass) => {
-					console.log('sent encrypt request', pass);
-					this.setState({secretMsg: pass})
+					this.setState({secretMsg: pass, isOpen: true})
 			})
 	};
 
 	handleDecrypt() {
-		alert('Decrypt')
+		this.setState({isOpen: true})
 	};
+
+	getData(val) {
+		console.log('IN GET DATA', val);
+		this.setState({	name: val.name, 
+							      message: val.message, 
+										expiration: val.expiration,
+										isOpen: false
+									})
+	}
 
 
 	render() {
-		const isOpen = this.state.open;
-		var message = this.state.secretMsg;
+		var isOpen = this.state.isOpen;
+		var secretMsg = this.state.secretMsg;
+		var message = this.state.message;
+		var passphrase = this.state.passphrase;
 
-		let dial = null;
 
-		if(isOpen) {
-			dial = <MyDialog message={message} isOpen={isOpen}></MyDialog>;
-		} else {
-			dial = null;
-		}
 
 		return(
 			<div>
@@ -86,7 +116,6 @@ export default class Main extends React.Component{
 				  <CardTitle 
 			      avatar="https://placeimg.com/80/80/animals"
 			      title="Tovia's Enigma"
-			      // subtitle="Subtitle here"
 			    />
 
 
@@ -100,7 +129,7 @@ export default class Main extends React.Component{
         
 				  <CardActions>
 			      <Button label="Encrypt" onClick={this.handleEncrypt.bind(this, 'encrypt')}/>
-			      <Button label="Decrypt" onClick={this.handleEncrypt.bind(this, 'decrypt')}/>
+			      <Button label="Decrypt" onClick={this.handleDecrypt.bind(this, 'decrypt')}/>
 			    </CardActions>
 
 			  </Card>
@@ -110,9 +139,15 @@ export default class Main extends React.Component{
 
 			  <p>Your Passphrase - <strong>{this.state.passphrase}</strong></p>
 
-			  <a href="#" onClick={this.handdlePasshprase.bind(this)}>Get New Passphrase</a>
+			  <a href="#" onClick={this.handlePassphrase}>Get New Passphrase</a>
 
-				{dial}
+				<MyDialog 
+					triggerParentUpdate={this.getData} 
+					secretMsg={secretMsg} 
+					isOpen={isOpen} 
+					passphrase={passphrase} 
+				/>
+
 			</div>
 		);
 	};

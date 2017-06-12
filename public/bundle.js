@@ -11580,16 +11580,19 @@ var Main = function (_React$Component) {
 			message: '',
 			secretMsg: '',
 			expiration: '',
-			passphrase: '',
-			open: false
+			passphrase: 'blabla',
+			isOpen: false
 		};
+
+		_this.handlePassphrase = _this.handlePassphrase.bind(_this);
+		_this.getData = _this.getData.bind(_this);
 		return _this;
 	}
 
 	_createClass(Main, [{
 		key: 'componentWillMount',
 		value: function componentWillMount() {
-			this.handdlePasshprase();
+			this.handlePassphrase();
 		}
 	}, {
 		key: 'handleChange',
@@ -11597,54 +11600,79 @@ var Main = function (_React$Component) {
 			this.setState(_defineProperty({}, name, value));
 		}
 	}, {
-		key: 'handdlePasshprase',
-		value: function handdlePasshprase() {
-			var _this2 = this;
+		key: 'handlePassphrase',
+		value: function handlePassphrase() {
+			var url = 'https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere';
 
-			_jquery2.default.post('https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere', function (pass) {
-				console.log('pass: ', pass);
-				_this2.setState({
-					passphrase: pass
-				});
-			}).done(function (pass) {
-				console.log("Successfully retrieved passphrase");
-			}).fail(function () {
-				console.log("Unable to retrieve passphrase.");
-			});
+			this.state.passphrase == 'blabla' ? this.setState({ passphrase: 'changed' }) : this.setState({ passphrase: 'blabla' }
+
+			// $.ajax({
+			// 	type: "GET",
+			// 	'Access-Control-Allow-Origin':,
+			// 	url: url,
+			// 	// jsonp: "callback",
+			// 	// dataType: 'jsonp',
+			// 	// crossDomain: true,
+
+
+			// 	success: (pass) => {
+			// 		console.log('pass: ', pass)
+			// 	}
+
+			// })
+
+
+			// $.get(url, (pass) => {
+			// 	console.log('pass: ', pass);
+			// 	this.setState({
+			// 		passphrase: pass
+			// 	})
+			// })
+			// .done(function(pass) {
+			//    console.log( "Successfully retrieved passphrase" );
+			//  })
+			//  .fail(function() {
+			//    console.log( "Unable to retrieve passphrase." );
+			//  })
+			);
 		}
 	}, {
 		key: 'handleEncrypt',
 		value: function handleEncrypt(mode) {
-			var _this3 = this;
+			var _this2 = this;
 
 			console.log('Encrypt: ', this.state.message);
 
-			_jquery2.default.post('/encrypt', { message: this.state.message,
+			_jquery2.default.post('/encrypt', { name: this.state.name,
+				message: this.state.message,
 				passphrase: this.state.passphrase,
 				expiration: this.state.expiration,
 				mode: mode }, function (pass) {
-				console.log('sent encrypt request', pass);
-				_this3.setState({ secretMsg: pass });
+				_this2.setState({ secretMsg: pass, isOpen: true });
 			});
 		}
 	}, {
 		key: 'handleDecrypt',
 		value: function handleDecrypt() {
-			alert('Decrypt');
+			this.setState({ isOpen: true });
+		}
+	}, {
+		key: 'getData',
+		value: function getData(val) {
+			console.log('IN GET DATA', val);
+			this.setState({ name: val.name,
+				message: val.message,
+				expiration: val.expiration,
+				isOpen: false
+			});
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var isOpen = this.state.open;
-			var message = this.state.secretMsg;
-
-			var dial = null;
-
-			if (isOpen) {
-				dial = _react2.default.createElement(_dialog4.default, { message: message, isOpen: isOpen });
-			} else {
-				dial = null;
-			}
+			var isOpen = this.state.isOpen;
+			var secretMsg = this.state.secretMsg;
+			var message = this.state.message;
+			var passphrase = this.state.passphrase;
 
 			return _react2.default.createElement(
 				'div',
@@ -11655,7 +11683,6 @@ var Main = function (_React$Component) {
 					_react2.default.createElement(_card.CardTitle, {
 						avatar: 'https://placeimg.com/80/80/animals',
 						title: 'Tovia\'s Enigma'
-						// subtitle="Subtitle here"
 					}),
 					_react2.default.createElement(_input2.default, { type: 'text', label: 'Name', value: this.state.name, onChange: this.handleChange.bind(this, 'name'), required: true }),
 					_react2.default.createElement(_input2.default, { type: 'text', label: 'Message', value: this.state.message, onChange: this.handleChange.bind(this, 'message'), maxLength: 120, required: true }),
@@ -11664,7 +11691,7 @@ var Main = function (_React$Component) {
 						_card.CardActions,
 						null,
 						_react2.default.createElement(_button2.default, { label: 'Encrypt', onClick: this.handleEncrypt.bind(this, 'encrypt') }),
-						_react2.default.createElement(_button2.default, { label: 'Decrypt', onClick: this.handleEncrypt.bind(this, 'decrypt') })
+						_react2.default.createElement(_button2.default, { label: 'Decrypt', onClick: this.handleDecrypt.bind(this, 'decrypt') })
 					)
 				),
 				_react2.default.createElement(
@@ -11679,10 +11706,15 @@ var Main = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'a',
-					{ href: '#', onClick: this.handdlePasshprase.bind(this) },
+					{ href: '#', onClick: this.handlePassphrase },
 					'Get New Passphrase'
 				),
-				dial
+				_react2.default.createElement(_dialog4.default, {
+					triggerParentUpdate: this.getData,
+					secretMsg: secretMsg,
+					isOpen: isOpen,
+					passphrase: passphrase
+				})
 			);
 		}
 	}]);
@@ -36838,7 +36870,7 @@ module.exports = function (css) {
 
 
 Object.defineProperty(exports, "__esModule", {
-		value: true
+	value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -36850,6 +36882,10 @@ var _react2 = _interopRequireDefault(_react);
 var _theme = __webpack_require__(239);
 
 var _theme2 = _interopRequireDefault(_theme);
+
+var _jquery = __webpack_require__(232);
+
+var _jquery2 = _interopRequireDefault(_jquery);
 
 var _button = __webpack_require__(92);
 
@@ -36876,68 +36912,90 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var MyDialog = function (_React$Component) {
-		_inherits(MyDialog, _React$Component);
+	_inherits(MyDialog, _React$Component);
 
-		function MyDialog(props) {
-				_classCallCheck(this, MyDialog);
+	function MyDialog(props) {
+		_classCallCheck(this, MyDialog);
 
-				var _this = _possibleConstructorReturn(this, (MyDialog.__proto__ || Object.getPrototypeOf(MyDialog)).call(this, props));
+		var _this = _possibleConstructorReturn(this, (MyDialog.__proto__ || Object.getPrototypeOf(MyDialog)).call(this, props));
 
-				_this.state = {
-						message: _this.props.message,
-						active: false
-				};
+		_this.state = {
+			secretMsg: _this.props.secretMsg,
+			active: _this.props.isOpen,
+			passphrase: _this.props.passphrase,
+			message: '',
+			expiration: ''
+		};
 
-				_this.handleToggle = _this.handleToggle.bind(_this);
-				_this.handleDecrypt = _this.handleDecrypt.bind(_this);
+		_this.handleToggle = _this.handleToggle.bind(_this);
+		_this.handleDecrypt = _this.handleDecrypt.bind(_this);
 
-				_this.actions = [{ label: "Close", onClick: _this.handleToggle }, { label: "Decrypt", onClick: _this.Decrypt }];
-				return _this;
+		_this.actions = [{ label: "Close", onClick: _this.handleToggle }, { label: "Decrypt", onClick: _this.handleDecrypt }];
+		return _this;
+	}
+
+	_createClass(MyDialog, [{
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(newProps) {
+			console.log('willmount');
+			this.setState({ secretMsg: newProps.secretMsg, active: newProps.isOpen });
 		}
+	}, {
+		key: 'handleChange',
+		value: function handleChange(name, value) {
 
-		_createClass(MyDialog, [{
-				key: 'handleChange',
-				value: function handleChange(name, value) {
-						console.log('name: ', name, 'value: ', value);
-						this.setState(_defineProperty({}, name, value));
-				}
-		}, {
-				key: 'handleToggle',
-				value: function handleToggle() {
-						this.setState({ active: !this.state.active });
-				}
-		}, {
-				key: 'handleDecrypt',
-				value: function handleDecrypt() {
+			this.setState(_defineProperty({}, name, value));
+		}
+	}, {
+		key: 'handleToggle',
+		value: function handleToggle() {
+			this.setState({ active: !this.state.active });
+		}
+	}, {
+		key: 'handleDecrypt',
+		value: function handleDecrypt() {
+			var _this2 = this;
 
-						this.handleToggle();
-				}
-		}, {
-				key: 'render',
-				value: function render() {
-						return _react2.default.createElement(
-								'div',
-								null,
-								_react2.default.createElement(
-										_dialog2.default,
-										{
-												actions: this.actions,
-												active: this.state.active,
-												onEscKeyDown: this.handleToggle,
-												onOverlayClick: this.handleToggle,
-												title: 'De/Encryption' },
-										_react2.default.createElement(_input2.default, { type: 'text', label: 'Message', value: this.state.message, onChange: this.handleChange.bind(this, 'message'), maxLength: 120, required: true }),
-										_react2.default.createElement(
-												'p',
-												null,
-												'Here you can add arbitrary content. Components like Pickers are using dialogs now.'
-										)
-								)
-						);
-				}
-		}]);
+			console.log('Encrypt: ', this.state.secretMsg);
 
-		return MyDialog;
+			_jquery2.default.post('/encrypt', { secretMsg: this.state.secretMsg,
+				passphrase: this.state.passphrase }, function (dec) {
+				console.log('sent encrypt request', dec);
+				_this2.setState({ name: dec.name,
+					message: dec.message,
+					expiration: dec.expiration
+				});
+
+				_this2.props.triggerParentUpdate(_this2.state);
+			}, 'json'
+
+			// this.handleToggle();
+			);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			// console.log('open? ', this.props)
+			console.log('state: ', this.state);
+
+			return _react2.default.createElement(
+				'div',
+				null,
+				_react2.default.createElement(
+					_dialog2.default,
+					{
+						actions: this.actions,
+						active: this.state.active,
+						onEscKeyDown: this.handleToggle,
+						onOverlayClick: this.handleToggle,
+						title: 'De/Encryption' },
+					_react2.default.createElement(_input2.default, { type: 'text', label: 'Message', value: this.state.secretMsg, onChange: this.handleChange.bind(this, 'secretMsg'), multiline: true, rows: 5, required: true })
+				)
+			);
+		}
+	}]);
+
+	return MyDialog;
 }(_react2.default.Component);
 
 // <Button label='Show my dialog' onClick={this.handleToggle} />
