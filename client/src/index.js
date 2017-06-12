@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './main.js';
+// import MyDialog from './dialog.js';
 require('../public/css/default.css');
 
 // import {encrypt} from '../../definitions/helpers.js'

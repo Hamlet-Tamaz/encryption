@@ -11547,9 +11547,13 @@ var _input = __webpack_require__(206);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _dialog = __webpack_require__(241);
+var _dialog = __webpack_require__(244);
 
 var _dialog2 = _interopRequireDefault(_dialog);
+
+var _dialog3 = __webpack_require__(241);
+
+var _dialog4 = _interopRequireDefault(_dialog3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11560,6 +11564,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+console.log('-------dialog');
 
 var Main = function (_React$Component) {
 	_inherits(Main, _React$Component);
@@ -11572,8 +11578,10 @@ var Main = function (_React$Component) {
 		_this.state = {
 			name: '',
 			message: '',
+			secretMsg: '',
 			expiration: '',
-			passphrase: ''
+			passphrase: '',
+			open: false
 		};
 		return _this;
 	}
@@ -11607,14 +11615,16 @@ var Main = function (_React$Component) {
 	}, {
 		key: 'handleEncrypt',
 		value: function handleEncrypt(mode) {
+			var _this3 = this;
+
 			console.log('Encrypt: ', this.state.message);
 
 			_jquery2.default.post('/encrypt', { message: this.state.message,
 				passphrase: this.state.passphrase,
 				expiration: this.state.expiration,
-				mode: mode
-			}).done(function (pass) {
+				mode: mode }, function (pass) {
 				console.log('sent encrypt request', pass);
+				_this3.setState({ secretMsg: pass });
 			});
 		}
 	}, {
@@ -11625,6 +11635,17 @@ var Main = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var isOpen = this.state.open;
+			var message = this.state.secretMsg;
+
+			var dial = null;
+
+			if (isOpen) {
+				dial = _react2.default.createElement(_dialog4.default, { message: message, isOpen: isOpen });
+			} else {
+				dial = null;
+			}
+
 			return _react2.default.createElement(
 				'div',
 				null,
@@ -11661,7 +11682,7 @@ var Main = function (_React$Component) {
 					{ href: '#', onClick: this.handdlePasshprase.bind(this) },
 					'Get New Passphrase'
 				),
-				_react2.default.createElement('myDialog', null)
+				dial
 			);
 		}
 	}]);
@@ -26046,6 +26067,7 @@ var _main2 = _interopRequireDefault(_main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import MyDialog from './dialog.js';
 __webpack_require__(98);
 
 // import {encrypt} from '../../definitions/helpers.js'
@@ -36816,7 +36838,7 @@ module.exports = function (css) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+		value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -36829,17 +36851,9 @@ var _theme = __webpack_require__(239);
 
 var _theme2 = _interopRequireDefault(_theme);
 
-var _jquery = __webpack_require__(232);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
 var _button = __webpack_require__(92);
 
 var _button2 = _interopRequireDefault(_button);
-
-var _app_bar = __webpack_require__(195);
-
-var _app_bar2 = _interopRequireDefault(_app_bar);
 
 var _card = __webpack_require__(204);
 
@@ -36853,67 +36867,83 @@ var _dialog2 = _interopRequireDefault(_dialog);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-;
-;
-;
+var MyDialog = function (_React$Component) {
+		_inherits(MyDialog, _React$Component);
 
-var myDialog = function (_React$Component) {
-  _inherits(myDialog, _React$Component);
+		function MyDialog(props) {
+				_classCallCheck(this, MyDialog);
 
-  function myDialog(props) {
-    _classCallCheck(this, myDialog);
+				var _this = _possibleConstructorReturn(this, (MyDialog.__proto__ || Object.getPrototypeOf(MyDialog)).call(this, props));
 
-    var _this = _possibleConstructorReturn(this, (myDialog.__proto__ || Object.getPrototypeOf(myDialog)).call(this, props));
+				_this.state = {
+						message: _this.props.message,
+						active: false
+				};
 
-    _this.state = {
-      active: false
-    };
+				_this.handleToggle = _this.handleToggle.bind(_this);
+				_this.handleDecrypt = _this.handleDecrypt.bind(_this);
 
-    var actions = [{ label: "Cancel", onClick: _this.handleToggle }, { label: "Save", onClick: _this.handleToggle }];
-    return _this;
-  }
+				_this.actions = [{ label: "Close", onClick: _this.handleToggle }, { label: "Decrypt", onClick: _this.Decrypt }];
+				return _this;
+		}
 
-  _createClass(myDialog, [{
-    key: 'handleToggle',
-    value: function handleToggle() {
-      this.setState({ active: !this.state.active });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(_button2.default, { label: 'Show my dialog', onClick: this.handleToggle }),
-        _react2.default.createElement(
-          _dialog2.default,
-          {
-            actions: this.actions,
-            active: this.state.active,
-            onEscKeyDown: this.handleToggle,
-            onOverlayClick: this.handleToggle,
-            title: 'My awesome dialog'
-          },
-          _react2.default.createElement(
-            'p',
-            null,
-            'Here you can add arbitrary content. Components like Pickers are using dialogs now.'
-          )
-        )
-      );
-    }
-  }]);
+		_createClass(MyDialog, [{
+				key: 'handleChange',
+				value: function handleChange(name, value) {
+						console.log('name: ', name, 'value: ', value);
+						this.setState(_defineProperty({}, name, value));
+				}
+		}, {
+				key: 'handleToggle',
+				value: function handleToggle() {
+						this.setState({ active: !this.state.active });
+				}
+		}, {
+				key: 'handleDecrypt',
+				value: function handleDecrypt() {
 
-  return myDialog;
+						this.handleToggle();
+				}
+		}, {
+				key: 'render',
+				value: function render() {
+						return _react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement(
+										_dialog2.default,
+										{
+												actions: this.actions,
+												active: this.state.active,
+												onEscKeyDown: this.handleToggle,
+												onOverlayClick: this.handleToggle,
+												title: 'De/Encryption' },
+										_react2.default.createElement(_input2.default, { type: 'text', label: 'Message', value: this.state.message, onChange: this.handleChange.bind(this, 'message'), maxLength: 120, required: true }),
+										_react2.default.createElement(
+												'p',
+												null,
+												'Here you can add arbitrary content. Components like Pickers are using dialogs now.'
+										)
+								)
+						);
+				}
+		}]);
+
+		return MyDialog;
 }(_react2.default.Component);
 
-exports.default = myDialog;
+// <Button label='Show my dialog' onClick={this.handleToggle} />
+
+
+exports.default = MyDialog;
 
 /***/ }),
 /* 242 */

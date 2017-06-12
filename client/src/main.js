@@ -6,8 +6,10 @@ import Button from 'react-toolbox/lib/button';
 import AppBar from 'react-toolbox/lib/app_bar';
 import {Card, CardMedia, CardTitle, CardText, CardActions}  from 'react-toolbox/lib/card';
 import Input from 'react-toolbox/lib/input';
-import myDialog from './dialog.js';
+import Dialog from 'react-toolbox/lib/dialog';
+import MyDialog from './dialog.js';
 
+console.log('-------dialog')
 
 export default class Main extends React.Component{
 
@@ -16,8 +18,10 @@ export default class Main extends React.Component{
 		this.state = {
 			name: '',
 			message: '', 
+			secretMsg: '',
 			expiration: '',
-			passphrase: ''
+			passphrase: '',
+			open: false
 		};
 	}
 
@@ -52,13 +56,11 @@ export default class Main extends React.Component{
 		$.post('/encrypt', {message: this.state.message, 
 												passphrase: this.state.passphrase, 
 												expiration: this.state.expiration,
-												mode: mode
-											})
-				.done(function(pass) {
+												mode: mode}, 
+			(pass) => {
 					console.log('sent encrypt request', pass);
-					
-
-				})
+					this.setState({secretMsg: pass})
+			})
 	};
 
 	handleDecrypt() {
@@ -67,6 +69,17 @@ export default class Main extends React.Component{
 
 
 	render() {
+		const isOpen = this.state.open;
+		var message = this.state.secretMsg;
+
+		let dial = null;
+
+		if(isOpen) {
+			dial = <MyDialog message={message} isOpen={isOpen}></MyDialog>;
+		} else {
+			dial = null;
+		}
+
 		return(
 			<div>
 			  <Card className={theme.Card} theme={theme}>
@@ -92,11 +105,14 @@ export default class Main extends React.Component{
 
 			  </Card>
 
+
+
+
 			  <p>Your Passphrase - <strong>{this.state.passphrase}</strong></p>
 
 			  <a href="#" onClick={this.handdlePasshprase.bind(this)}>Get New Passphrase</a>
 
-			  <myDialog></myDialog>
+				{dial}
 			</div>
 		);
 	};
