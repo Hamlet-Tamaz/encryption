@@ -67,10 +67,16 @@ function encrypt() {
 
 	}
 	else {
+
+		console.log('out: ', body.secretMsg)
 		out = decrypt(body.secretMsg);
 
+		try {
+			out = JSON.parse(out);
+		} catch (err) {
+			out = {error: "Your passphrase isn't correct."};
+		}
 
-		out = JSON.parse(out);
 
 		if(out.expiration < new Date().toISOString().split('T')[0] && out.expiration != '') {
 			out = {error: "Sorry, your message has either expired or not decryptable"};

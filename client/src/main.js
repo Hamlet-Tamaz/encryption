@@ -52,20 +52,20 @@ export default class Main extends React.Component{
 		let url = 'https://makemeapassword.org/api/v1/passphrase/plain?pc=1&wc=1&sp=n&minCh=7&ups=4&whenUp=Anywhere';
 
 		
-		// this.state.passphrase == 'blabla' ? this.setState({passphrase: 'changed'}) : this.setState({passphrase: 'blabla'})
+		this.state.passphrase == 'blabla' ? this.setState({passphrase: 'changed'}) : this.setState({passphrase: 'blabla'})
 
 
-		$.get(url, (pass) => {
-			this.setState({
-				passphrase: pass
-			})
-		})
-		.done(function(pass) {
-	    console.log( "Successfully retrieved passphrase" );
-	  })
-	  .fail(function() {
-	    console.log( "Unable to retrieve passphrase." );
-	  })
+		// $.get(url, (pass) => {
+		// 	this.setState({
+		// 		passphrase: pass
+		// 	})
+		// })
+		// .done(function(pass) {
+	 //    console.log( "Successfully retrieved passphrase" );
+	 //  })
+	 //  .fail(function() {
+	 //    console.log( "Unable to retrieve passphrase." );
+	 //  })
 	};
 
 	handleEncrypt(mode) {		
